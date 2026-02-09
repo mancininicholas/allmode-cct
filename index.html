@@ -724,58 +724,58 @@
                     const emailAddress = document.getElementById('emailAddressPublic').value.trim();
                     const voicemailPin = document.getElementById('voicemailPinPublic').value.trim();
                     const portalPassword = document.getElementById('portalPasswordPublic').value.trim();
-            const department = document.getElementById('departmentPublic').value.trim();
-            const site = document.getElementById('sitePublic').value.trim();
-            const areaCode = document.getElementById('areaCodePublic').value.trim();
-            const extensionSpeedDial = document.getElementById('extensionSpeedDialPublic').value.trim();
-            const outsideSpeedDial = document.getElementById('outsideSpeedDialPublic').value.trim();
+                    const department = document.getElementById('departmentPublic').value.trim();
+                    const site = document.getElementById('sitePublic').value.trim();
+                    const areaCode = document.getElementById('areaCodePublic').value.trim();
+                    const extensionSpeedDial = document.getElementById('extensionSpeedDialPublic').value.trim();
+                    const outsideSpeedDial = document.getElementById('outsideSpeedDialPublic').value.trim();
 
-            if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
-                alert('Please fill in all required fields (marked with *)');
-                return;
-            }
+                    if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
+                        alert('Please fill in all required fields (marked with *)');
+                        return;
+                    }
 
-            const login = `${extension}@${adminSettings.domain}`;
+                    const login = `${extension}@${adminSettings.domain}`;
 
-            const csvData = [
-                extension,
-                adminSettings.domain,
-                firstName,
-                lastName,
-                login,
-                portalPassword,
-                emailAddress,
-                voicemailPin,
-                department,
-                site,
-                DEFAULT_VALUES.vmailEnabled,
-                DEFAULT_VALUES.answerTimeout,
-                adminSettings.timezone,
-                areaCode,
-                adminSettings.callerIdNumber,
-                adminSettings.callerIdName,
-                adminSettings.nineOneOneCallerid,
-                adminSettings.dialPlan,
-                DEFAULT_VALUES.dialPermission,
-                DEFAULT_VALUES.audioDirectory,
-                DEFAULT_VALUES.visualDirectory,
-                DEFAULT_VALUES.vmailTranscribe,
-                DEFAULT_VALUES.emailVmail,
-                DEFAULT_VALUES.addPhoneExtension,
-                DEFAULT_VALUES.scope,
-                extensionSpeedDial,
-                outsideSpeedDial
-            ];
+                    const csvData = [
+                        extension,
+                        adminSettings.domain,
+                        firstName,
+                        lastName,
+                        login,
+                        portalPassword,
+                        emailAddress,
+                        voicemailPin,
+                        department,
+                        site,
+                        DEFAULT_VALUES.vmailEnabled,
+                        DEFAULT_VALUES.answerTimeout,
+                        adminSettings.timezone,
+                        areaCode,
+                        adminSettings.callerIdNumber,
+                        adminSettings.callerIdName,
+                        adminSettings.nineOneOneCallerid,
+                        adminSettings.dialPlan,
+                        DEFAULT_VALUES.dialPermission,
+                        DEFAULT_VALUES.audioDirectory,
+                        DEFAULT_VALUES.visualDirectory,
+                        DEFAULT_VALUES.vmailTranscribe,
+                        DEFAULT_VALUES.emailVmail,
+                        DEFAULT_VALUES.addPhoneExtension,
+                        DEFAULT_VALUES.scope,
+                        extensionSpeedDial,
+                        outsideSpeedDial
+                    ];
 
-            exportToCSV(csvData, firstName, lastName);
+                    exportToCSV(csvData, firstName, lastName);
 
-            document.getElementById('successMessagePublic').style.display = 'block';
-            document.getElementById('successMessagePublic').innerHTML = '<strong>Success!</strong> Your CSV file has been downloaded and your email client is opening. Please attach the downloaded file and send it to us.';
-            setTimeout(() => {
-                document.getElementById('successMessagePublic').style.display = 'none';
-            }, 8000);
+                    document.getElementById('successMessagePublic').style.display = 'block';
+                    document.getElementById('successMessagePublic').innerHTML = '<strong>Success!</strong> Your CSV file has been downloaded and your email client is opening. Please attach the downloaded file and send it to us.';
+                    setTimeout(() => {
+                        document.getElementById('successMessagePublic').style.display = 'none';
+                    }, 8000);
 
-            this.reset();
+                    this.reset();
                 });
             }
         });
@@ -787,66 +787,66 @@
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
 
-            if (Object.keys(adminSettings).length === 0) {
-                alert('Admin settings have not been configured yet. Please ask the administrator to set them up.');
-                return;
-            }
+                    if (Object.keys(adminSettings).length === 0) {
+                        alert('Admin settings have not been configured yet. Please ask the administrator to set them up.');
+                        return;
+                    }
 
-            const extension = document.getElementById('extension').value.trim();
-            const firstName = document.getElementById('firstName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            const emailAddress = document.getElementById('emailAddress').value.trim();
-            const voicemailPin = document.getElementById('voicemailPin').value.trim();
-            const portalPassword = document.getElementById('portalPassword').value.trim();
-            const department = document.getElementById('department').value.trim();
-            const site = document.getElementById('site').value.trim();
-            const areaCode = document.getElementById('areaCode').value.trim();
-            const extensionSpeedDial = document.getElementById('extensionSpeedDial').value.trim();
-            const outsideSpeedDial = document.getElementById('outsideSpeedDial').value.trim();
+                    const extension = document.getElementById('extension').value.trim();
+                    const firstName = document.getElementById('firstName').value.trim();
+                    const lastName = document.getElementById('lastName').value.trim();
+                    const emailAddress = document.getElementById('emailAddress').value.trim();
+                    const voicemailPin = document.getElementById('voicemailPin').value.trim();
+                    const portalPassword = document.getElementById('portalPassword').value.trim();
+                    const department = document.getElementById('department').value.trim();
+                    const site = document.getElementById('site').value.trim();
+                    const areaCode = document.getElementById('areaCode').value.trim();
+                    const extensionSpeedDial = document.getElementById('extensionSpeedDial').value.trim();
+                    const outsideSpeedDial = document.getElementById('outsideSpeedDial').value.trim();
 
-            if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
-                alert('Please fill in all required fields (marked with *)');
-                return;
-            }
+                    if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
+                        alert('Please fill in all required fields (marked with *)');
+                        return;
+                    }
 
-            const login = `${extension}@${adminSettings.domain}`;
+                    const login = `${extension}@${adminSettings.domain}`;
 
-            const csvData = [
-                extension,
-                adminSettings.domain,
-                firstName,
-                lastName,
-                login,
-                portalPassword,
-                emailAddress,
-                voicemailPin,
-                department,
-                site,
-                DEFAULT_VALUES.vmailEnabled,
-                DEFAULT_VALUES.answerTimeout,
-                adminSettings.timezone,
-                areaCode,
-                adminSettings.callerIdNumber,
-                adminSettings.callerIdName,
-                adminSettings.nineOneOneCallerid,
-                adminSettings.dialPlan,
-                DEFAULT_VALUES.dialPermission,
-                DEFAULT_VALUES.audioDirectory,
-                DEFAULT_VALUES.visualDirectory,
-                DEFAULT_VALUES.vmailTranscribe,
-                DEFAULT_VALUES.emailVmail,
-                DEFAULT_VALUES.addPhoneExtension,
-                DEFAULT_VALUES.scope
-            ];
+                    const csvData = [
+                        extension,
+                        adminSettings.domain,
+                        firstName,
+                        lastName,
+                        login,
+                        portalPassword,
+                        emailAddress,
+                        voicemailPin,
+                        department,
+                        site,
+                        DEFAULT_VALUES.vmailEnabled,
+                        DEFAULT_VALUES.answerTimeout,
+                        adminSettings.timezone,
+                        areaCode,
+                        adminSettings.callerIdNumber,
+                        adminSettings.callerIdName,
+                        adminSettings.nineOneOneCallerid,
+                        adminSettings.dialPlan,
+                        DEFAULT_VALUES.dialPermission,
+                        DEFAULT_VALUES.audioDirectory,
+                        DEFAULT_VALUES.visualDirectory,
+                        DEFAULT_VALUES.vmailTranscribe,
+                        DEFAULT_VALUES.emailVmail,
+                        DEFAULT_VALUES.addPhoneExtension,
+                        DEFAULT_VALUES.scope
+                    ];
 
-            exportToCSV(csvData, firstName, lastName);
+                    exportToCSV(csvData, firstName, lastName);
 
-            document.getElementById('successMessage').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('successMessage').style.display = 'none';
-            }, 5000);
+                    document.getElementById('successMessage').style.display = 'block';
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 5000);
 
-            this.reset();
+                    this.reset();
                 });
             }
         });
