@@ -762,12 +762,10 @@
                         DEFAULT_VALUES.vmailTranscribe,
                         DEFAULT_VALUES.emailVmail,
                         DEFAULT_VALUES.addPhoneExtension,
-                        DEFAULT_VALUES.scope,
-                        extensionSpeedDial,
-                        outsideSpeedDial
+                        DEFAULT_VALUES.scope
                     ];
 
-                    exportToCSV(csvData, firstName, lastName);
+                    exportToCSV(csvData, firstName, lastName, extensionSpeedDial, outsideSpeedDial);
 
                     document.getElementById('successMessagePublic').style.display = 'block';
                     document.getElementById('successMessagePublic').innerHTML = '<strong>Success!</strong> Your CSV file has been downloaded and your email client is opening. Please attach the downloaded file and send it to us.';
@@ -839,7 +837,7 @@
                         DEFAULT_VALUES.scope
                     ];
 
-                    exportToCSV(csvData, firstName, lastName);
+                    exportToCSV(csvData, firstName, lastName, extensionSpeedDial, outsideSpeedDial);
 
                     document.getElementById('successMessage').style.display = 'block';
                     setTimeout(() => {
@@ -852,7 +850,7 @@
         });
 
         // Export to CSV and open email
-        function exportToCSV(data, firstName, lastName) {
+        function exportToCSV(data, firstName, lastName, extensionSpeedDial = '', outsideSpeedDial = '') {
             const headers = [
                 'extension',
                 'domain',
@@ -903,14 +901,10 @@
 
             // Open email client with pre-filled fields
             const emailSubject = `Customer Information - ${firstName} ${lastName}`;
-            const emailBody = `Hi,\n\nPlease find attached the customer information file for ${firstName} ${lastName}.
-            Speed Dial Information:
-            -----------------------
-            Internal Extensions:
-            ${extensionSpeedDial || "None provided"}
-            Outside Numbers:
-            ${outsideSpeedDial || "None provided"}
-            \n\nThank you!`;
+            const speedDialSection = extensionSpeedDial || outsideSpeedDial 
+                ? `\n\n--- SPEED DIAL INFORMATION ---\nInternal Extensions:\n${extensionSpeedDial || '(None provided)'}\n\nOutside Numbers:\n${outsideSpeedDial || '(None provided)'}` 
+                : '';
+            const emailBody = `Hi,\n\nPlease find attached the customer information file for ${firstName} ${lastName}.${speedDialSection}\n\nThank you!`;
             const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
             
             setTimeout(() => {
