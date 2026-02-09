@@ -739,9 +739,10 @@
             exportToCSV(csvData, firstName, lastName);
 
             document.getElementById('successMessagePublic').style.display = 'block';
+            document.getElementById('successMessagePublic').innerHTML = '<strong>Success!</strong> Your CSV file has been downloaded and your email client is opening. Please attach the downloaded file and send it to us.';
             setTimeout(() => {
                 document.getElementById('successMessagePublic').style.display = 'none';
-            }, 5000);
+            }, 8000);
 
             this.reset();
                 });
@@ -818,7 +819,7 @@
             }
         });
 
-        // Export to CSV
+        // Export to CSV and open email
         function exportToCSV(data, firstName, lastName) {
             const headers = [
                 'extension',
@@ -860,12 +861,24 @@
             const timestamp = new Date().toISOString().split('T')[0];
             const filename = `customer_info_${firstName}_${lastName}_${timestamp}.csv`;
 
+            // Download the CSV
             link.setAttribute('href', url);
             link.setAttribute('download', filename);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+
+            // Open email client with pre-filled fields
+            const emailSubject = `Customer Information - ${firstName} ${lastName}`;
+            const emailBody = `Hi,\n\nPlease find attached the customer information file for ${firstName} ${lastName}.\n\nThank you!`;
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            
+            setTimeout(() => {
+                window.location.href = mailtoLink;
+            }, 500);
+
+            alert(`The CSV file "${filename}" has been downloaded to your Downloads folder.\n\nYour email client will open in a moment. Please attach the downloaded CSV file to complete the submission.`);
         }
 
         // Update preview
