@@ -260,6 +260,39 @@
             top: 20px;
             right: 20px;
         }
+
+        .team-member-form {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .team-member-form .team-member-number {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .team-member-form .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .team-member-form .remove-btn:hover {
+            background: #d32f2f;
+        }
     </style>
 </head>
 <body>
@@ -389,19 +422,17 @@
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="extensionSpeedDial">Extensions for Speed Dial</label>
-                            <textarea id="extensionSpeedDial" name="extensionSpeedDial" placeholder="Example: 6130 - Nick" style="font-family: monospace; height: 80px; resize: vertical;"></textarea>
-                        </div>
+                    <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+                    <h3 style="color: #333; margin-bottom: 15px;">Department Team Members</h3>
+                    <div class="info-box" style="background: #e8f5e9; border-left-color: #4caf50;">
+                        <p><strong>Instructions:</strong> Add the information for each person in your department. You can add multiple team members.</p>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="outsideSpeedDial">Outside Numbers for Speed Dial</label>
-                            <textarea id="outsideSpeedDial" name="outsideSpeedDial" placeholder="Example: 607-422-5587 - Nick" style="font-family: monospace; height: 80px; resize: vertical;"></textarea>
-                        </div>
+                    <div id="teamMembersContainer">
+                        <!-- Team members will be added here dynamically -->
                     </div>
+
+                    <button type="button" class="btn-secondary" style="margin-bottom: 20px;" onclick="addTeamMember()">+ Add Team Member</button>
 
                     <div class="button-group">
                         <button type="button" class="btn-secondary" onclick="clearCustomerForm()">Clear</button>
@@ -500,19 +531,17 @@
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="extensionSpeedDialPublic">Extensions for Speed Dial</label>
-                        <textarea id="extensionSpeedDialPublic" name="extensionSpeedDial" placeholder="Example: 6130 - Nick" style="font-family: monospace; height: 80px; resize: vertical;"></textarea>
-                    </div>
+                <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+                <h3 style="color: #333; margin-bottom: 15px;">Department Team Members</h3>
+                <div class="info-box" style="background: #e8f5e9; border-left-color: #4caf50;">
+                    <p><strong>Instructions:</strong> Add the information for each person in your department. You can add multiple team members.</p>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="outsideSpeedDialPublic">Outside Numbers for Speed Dial</label>
-                        <textarea id="outsideSpeedDialPublic" name="outsideSpeedDial" placeholder="Example: 607-422-5587 - Nick" style="font-family: monospace; height: 80px; resize: vertical;"></textarea>
-                    </div>
+                <div id="teamMembersContainerPublic">
+                    <!-- Team members will be added here dynamically -->
                 </div>
+
+                <button type="button" class="btn-secondary" style="margin-bottom: 20px;" onclick="addTeamMemberPublic()">+ Add Team Member</button>
 
                 <div class="button-group">
                     <button type="button" class="btn-secondary" onclick="clearCustomerFormPublic()">Clear</button>
@@ -704,6 +733,95 @@
         // Clear public customer form
         function clearCustomerFormPublic() {
             document.getElementById('customerFormPublic').reset();
+            document.getElementById('teamMembersContainerPublic').innerHTML = '';
+            teamMembersPublic = [];
+        }
+
+        // Team members storage
+        let teamMembers = [];
+        let teamMembersPublic = [];
+
+        // Create team member form HTML
+        function createTeamMemberFormHTML(index, isPublic = false) {
+            const prefix = isPublic ? 'Public' : '';
+            return `
+                <div class="team-member-form" data-member-id="${index}">
+                    <span class="team-member-number">Team Member #${index + 1}</span>
+                    <button type="button" class="remove-btn" onclick="removeTeamMember(${index}, ${isPublic})">Remove</button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tmExtension${prefix}${index}" class="required">Extension</label>
+                            <input type="text" id="tmExtension${prefix}${index}" placeholder="e.g., 101" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tmFirstName${prefix}${index}" class="required">First Name</label>
+                            <input type="text" id="tmFirstName${prefix}${index}" placeholder="e.g., Jane" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tmLastName${prefix}${index}" class="required">Last Name</label>
+                            <input type="text" id="tmLastName${prefix}${index}" placeholder="e.g., Smith" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tmEmail${prefix}${index}" class="required">Email Address</label>
+                            <input type="email" id="tmEmail${prefix}${index}" placeholder="e.g., jane.smith@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tmVoicemailPin${prefix}${index}" class="required">Voicemail PIN</label>
+                            <input type="password" id="tmVoicemailPin${prefix}${index}" placeholder="Enter voicemail PIN" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tmPortalPassword${prefix}${index}" class="required">Portal Password</label>
+                            <input type="password" id="tmPortalPassword${prefix}${index}" placeholder="Enter portal password" required>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add team member to admin form
+        function addTeamMember() {
+            const index = teamMembers.length;
+            const container = document.getElementById('teamMembersContainer');
+            const formHTML = createTeamMemberFormHTML(index, false);
+            container.insertAdjacentHTML('beforeend', formHTML);
+            teamMembers.push(index);
+        }
+
+        // Add team member to public form
+        function addTeamMemberPublic() {
+            const index = teamMembersPublic.length;
+            const container = document.getElementById('teamMembersContainerPublic');
+            const formHTML = createTeamMemberFormHTML(index, true);
+            container.insertAdjacentHTML('beforeend', formHTML);
+            teamMembersPublic.push(index);
+        }
+
+        // Remove team member from form
+        function removeTeamMember(index, isPublic = false) {
+            const container = isPublic ? document.getElementById('teamMembersContainerPublic') : document.getElementById('teamMembersContainer');
+            const element = container.querySelector(`[data-member-id="${index}"]`);
+            if (element) {
+                element.remove();
+            }
+            const arr = isPublic ? teamMembersPublic : teamMembers;
+            arr.splice(arr.indexOf(index), 1);
+        }
+
+        // Get team member data
+        function getTeamMemberData(index, isPublic = false) {
+            const prefix = isPublic ? 'Public' : '';
+            return {
+                extension: document.getElementById(`tmExtension${prefix}${index}`).value.trim(),
+                firstName: document.getElementById(`tmFirstName${prefix}${index}`).value.trim(),
+                lastName: document.getElementById(`tmLastName${prefix}${index}`).value.trim(),
+                emailAddress: document.getElementById(`tmEmail${prefix}${index}`).value.trim(),
+                voicemailPin: document.getElementById(`tmVoicemailPin${prefix}${index}`).value.trim(),
+                portalPassword: document.getElementById(`tmPortalPassword${prefix}${index}`).value.trim()
+            };
         }
 
         // Handle public customer form submission
@@ -727,53 +845,59 @@
                     const department = document.getElementById('departmentPublic').value.trim();
                     const site = document.getElementById('sitePublic').value.trim();
                     const areaCode = document.getElementById('areaCodePublic').value.trim();
-                    const extensionSpeedDial = document.getElementById('extensionSpeedDialPublic').value.trim();
-                    const outsideSpeedDial = document.getElementById('outsideSpeedDialPublic').value.trim();
 
                     if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
                         alert('Please fill in all required fields (marked with *)');
                         return;
                     }
 
-                    const login = `${extension}@${adminSettings.domain}`;
-
-                    const csvData = [
+                    // Collect main person's data
+                    const allPeople = [{
                         extension,
-                        adminSettings.domain,
                         firstName,
                         lastName,
-                        login,
-                        portalPassword,
                         emailAddress,
                         voicemailPin,
+                        portalPassword,
                         department,
                         site,
-                        DEFAULT_VALUES.vmailEnabled,
-                        DEFAULT_VALUES.answerTimeout,
-                        adminSettings.timezone,
-                        areaCode,
-                        adminSettings.callerIdNumber,
-                        adminSettings.callerIdName,
-                        adminSettings.nineOneOneCallerid,
-                        adminSettings.dialPlan,
-                        DEFAULT_VALUES.dialPermission,
-                        DEFAULT_VALUES.audioDirectory,
-                        DEFAULT_VALUES.visualDirectory,
-                        DEFAULT_VALUES.vmailTranscribe,
-                        DEFAULT_VALUES.emailVmail,
-                        DEFAULT_VALUES.addPhoneExtension,
-                        DEFAULT_VALUES.scope
-                    ];
+                        areaCode
+                    }];
 
-                    exportToCSV(csvData, firstName, lastName, extensionSpeedDial, outsideSpeedDial);
+                    // Collect team member data
+                    for (const memberId of teamMembersPublic) {
+                        const member = getTeamMemberData(memberId, true);
+                        if (member.extension && member.firstName && member.lastName && member.emailAddress && member.voicemailPin && member.portalPassword) {
+                            allPeople.push({
+                                extension: member.extension,
+                                firstName: member.firstName,
+                                lastName: member.lastName,
+                                emailAddress: member.emailAddress,
+                                voicemailPin: member.voicemailPin,
+                                portalPassword: member.portalPassword,
+                                department: department, // same department as main person
+                                site: site,
+                                areaCode: areaCode
+                            });
+                        }
+                    }
+
+                    if (allPeople.length === 1 && teamMembersPublic.length > 0) {
+                        alert('Please fill in all required fields for each team member');
+                        return;
+                    }
+
+                    exportToCSV(allPeople, firstName, lastName);
 
                     document.getElementById('successMessagePublic').style.display = 'block';
-                    document.getElementById('successMessagePublic').innerHTML = '<strong>Success!</strong> Your CSV file has been downloaded and your email client is opening. Please attach the downloaded file and send it to us.';
+                    document.getElementById('successMessagePublic').innerHTML = `<strong>Success!</strong> Your CSV file with ${allPeople.length} person(s) has been downloaded and your email client is opening. Please attach the downloaded file and send it to us.`;
                     setTimeout(() => {
                         document.getElementById('successMessagePublic').style.display = 'none';
                     }, 8000);
 
                     this.reset();
+                    teamMembersPublic = [];
+                    document.getElementById('teamMembersContainerPublic').innerHTML = '';
                 });
             }
         });
@@ -799,58 +923,65 @@
                     const department = document.getElementById('department').value.trim();
                     const site = document.getElementById('site').value.trim();
                     const areaCode = document.getElementById('areaCode').value.trim();
-                    const extensionSpeedDial = document.getElementById('extensionSpeedDial').value.trim();
-                    const outsideSpeedDial = document.getElementById('outsideSpeedDial').value.trim();
 
                     if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
                         alert('Please fill in all required fields (marked with *)');
                         return;
                     }
 
-                    const login = `${extension}@${adminSettings.domain}`;
-
-                    const csvData = [
+                    // Collect main person's data
+                    const allPeople = [{
                         extension,
-                        adminSettings.domain,
                         firstName,
                         lastName,
-                        login,
-                        portalPassword,
                         emailAddress,
                         voicemailPin,
+                        portalPassword,
                         department,
                         site,
-                        DEFAULT_VALUES.vmailEnabled,
-                        DEFAULT_VALUES.answerTimeout,
-                        adminSettings.timezone,
-                        areaCode,
-                        adminSettings.callerIdNumber,
-                        adminSettings.callerIdName,
-                        adminSettings.nineOneOneCallerid,
-                        adminSettings.dialPlan,
-                        DEFAULT_VALUES.dialPermission,
-                        DEFAULT_VALUES.audioDirectory,
-                        DEFAULT_VALUES.visualDirectory,
-                        DEFAULT_VALUES.vmailTranscribe,
-                        DEFAULT_VALUES.emailVmail,
-                        DEFAULT_VALUES.addPhoneExtension,
-                        DEFAULT_VALUES.scope
-                    ];
+                        areaCode
+                    }];
 
-                    exportToCSV(csvData, firstName, lastName, extensionSpeedDial, outsideSpeedDial);
+                    // Collect team member data
+                    for (const memberId of teamMembers) {
+                        const member = getTeamMemberData(memberId, false);
+                        if (member.extension && member.firstName && member.lastName && member.emailAddress && member.voicemailPin && member.portalPassword) {
+                            allPeople.push({
+                                extension: member.extension,
+                                firstName: member.firstName,
+                                lastName: member.lastName,
+                                emailAddress: member.emailAddress,
+                                voicemailPin: member.voicemailPin,
+                                portalPassword: member.portalPassword,
+                                department: department, // same department as main person
+                                site: site,
+                                areaCode: areaCode
+                            });
+                        }
+                    }
+
+                    if (allPeople.length === 1 && teamMembers.length > 0) {
+                        alert('Please fill in all required fields for each team member');
+                        return;
+                    }
+
+                    exportToCSV(allPeople, firstName, lastName);
 
                     document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('successMessage').innerHTML = `<strong>Success!</strong> Your CSV file with ${allPeople.length} person(s) has been downloaded and your email client is opening. Please attach the downloaded file and send it to us.`;
                     setTimeout(() => {
                         document.getElementById('successMessage').style.display = 'none';
                     }, 5000);
 
                     this.reset();
+                    teamMembers = [];
+                    document.getElementById('teamMembersContainer').innerHTML = '';
                 });
             }
         });
 
         // Export to CSV and open email
-        function exportToCSV(data, firstName, lastName, extensionSpeedDial = '', outsideSpeedDial = '') {
+        function exportToCSV(peopleArray, firstName, lastName) {
             const headers = [
                 'extension',
                 'domain',
@@ -879,10 +1010,46 @@
                 'scope'
             ];
 
-            const csvContent = [
-                headers.join(','),
-                data.join(',')
-            ].join('\n');
+            // Build CSV rows for each person
+            const csvRows = [headers.join(',')];
+            const emailRecords = [];
+
+            for (const person of peopleArray) {
+                const login = `${person.extension}@${adminSettings.domain}`;
+
+                const csvData = [
+                    person.extension,
+                    adminSettings.domain,
+                    person.firstName,
+                    person.lastName,
+                    login,
+                    person.portalPassword,
+                    person.emailAddress,
+                    person.voicemailPin,
+                    person.department,
+                    person.site,
+                    DEFAULT_VALUES.vmailEnabled,
+                    DEFAULT_VALUES.answerTimeout,
+                    adminSettings.timezone,
+                    person.areaCode,
+                    adminSettings.callerIdNumber,
+                    adminSettings.callerIdName,
+                    adminSettings.nineOneOneCallerid,
+                    adminSettings.dialPlan,
+                    DEFAULT_VALUES.dialPermission,
+                    DEFAULT_VALUES.audioDirectory,
+                    DEFAULT_VALUES.visualDirectory,
+                    DEFAULT_VALUES.vmailTranscribe,
+                    DEFAULT_VALUES.emailVmail,
+                    DEFAULT_VALUES.addPhoneExtension,
+                    DEFAULT_VALUES.scope
+                ];
+
+                csvRows.push(csvData.join(','));
+                emailRecords.push(`${person.firstName} ${person.lastName} (Ext: ${person.extension}, Email: ${person.emailAddress})`);
+            }
+
+            const csvContent = csvRows.join('\n');
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -901,17 +1068,15 @@
 
             // Open email client with pre-filled fields
             const emailSubject = `Customer Information - ${firstName} ${lastName}`;
-            const speedDialSection = extensionSpeedDial || outsideSpeedDial 
-                ? `\n\n--- SPEED DIAL INFORMATION ---\nInternal Extensions:\n${extensionSpeedDial || '(None provided)'}\n\nOutside Numbers:\n${outsideSpeedDial || '(None provided)'}` 
-                : '';
-            const emailBody = `Hi,\n\nPlease find attached the customer information file for ${firstName} ${lastName}.${speedDialSection}\n\nThank you!`;
+            const recordsList = emailRecords.join('\n');
+            const emailBody = `Hi,\n\nPlease find attached the customer information file for the following person(s):\n\n${recordsList}\n\nTotal records: ${peopleArray.length}\n\nThank you!`;
             const mailtoLink = `mailto:nmancini@all-mode.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
             
             setTimeout(() => {
                 window.location.href = mailtoLink;
             }, 500);
 
-            alert(`The CSV file "${filename}" has been downloaded to your Downloads folder.\n\nYour email client will open in a moment. Please attach the downloaded CSV file to complete the submission.`);
+            alert(`The CSV file "${filename}" containing ${peopleArray.length} record(s) has been downloaded to your Downloads folder.\n\nYour email client will open in a moment. Please attach the downloaded CSV file to complete the submission.`);
         }
 
         // Update preview
