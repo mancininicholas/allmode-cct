@@ -264,31 +264,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- Admin Login Screen -->
-        <div id="loginScreen" class="login-container">
-            <h2>Admin Login</h2>
-            <div class="info-box">
-                <p><strong>Admins Only:</strong> Enter your password to access admin settings.</p>
-            </div>
-            <div id="loginError" class="error-message"></div>
-            <form id="loginForm" onsubmit="handleAdminLogin(event)">
-                <div class="form-group">
-                    <label for="adminPassword" class="required">Admin Password</label>
-                    <input type="password" id="adminPassword" name="adminPassword" placeholder="Enter admin password" required>
-                </div>
-                <div class="button-group">
-                    <button type="submit" class="btn-primary">Login as Admin</button>
-                </div>
-            </form>
-            <p style="margin-top: 20px; color: #999; font-size: 14px;">
-                If you're a customer, scroll down to fill out the customer form instead.
-            </p>
-            <hr style="margin: 30px 0;">
-            <h3 style="color: #333; margin-bottom: 20px;">Customer Information Form</h3>
-        </div>
-
-        <!-- Main Content (Hidden until admin logs in or customer accesses) -->
-        <div id="mainContent" style="display: none;">
+        <!-- Admin Panel (Hidden until logged in) -->
+        <div id="adminPanel" style="display: none;">
             <div class="logout-btn">
                 <button type="button" class="btn-secondary" onclick="handleLogout()" style="padding: 8px 15px; font-size: 13px;">Logout Admin</button>
             </div>
@@ -350,8 +327,8 @@
                 </form>
             </div>
 
-            <!-- Customer Form Tab -->
-            <div id="customer" class="tab-content">
+            <!-- Customer Form Tab (inside admin panel) -->
+            <div id="customerTab" class="tab-content">
                 <h2>Customer Information</h2>
                 <div id="successMessage" class="success-message">
                     CSV file has been downloaded successfully!
@@ -434,6 +411,95 @@
                 </div>
             </div>
         </div>
+
+        <!-- Public Customer Form (Always visible) -->
+        <div id="publicCustomerForm">
+            <h2 style="margin-top: 0;">Customer Information Form</h2>
+            <div id="adminLoginSection" style="margin-bottom: 30px;">
+                <div class="info-box" style="background: #fff3cd; border-left-color: #ff9800;">
+                    <p><strong>Admin Access:</strong> Enter password to configure customer settings.</p>
+                </div>
+                <div id="loginError" class="error-message"></div>
+                <form id="loginForm" onsubmit="handleAdminLogin(event)" style="display: flex; gap: 10px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <label for="adminPassword">Admin Password</label>
+                        <input type="password" id="adminPassword" name="adminPassword" placeholder="Enter admin password" style="margin: 0;">
+                    </div>
+                    <button type="submit" class="btn-primary" style="margin: 0; padding: 10px 20px;">Login</button>
+                </form>
+            </div>
+
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+
+            <div class="info-box">
+                <p><strong>Instructions:</strong> Please fill in all the fields marked with an asterisk (*). Your login will be automatically generated from your extension and domain.</p>
+            </div>
+            <div id="successMessagePublic" class="success-message">
+                CSV file has been downloaded successfully!
+            </div>
+
+            <form id="customerFormPublic">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="extensionPublic" class="required">Current Extension</label>
+                        <input type="text" id="extensionPublic" name="extension" placeholder="e.g., 100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstNamePublic" class="required">First Name</label>
+                        <input type="text" id="firstNamePublic" name="firstName" placeholder="e.g., John" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="lastNamePublic" class="required">Last Name</label>
+                        <input type="text" id="lastNamePublic" name="lastName" placeholder="e.g., Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailAddressPublic" class="required">Email Address</label>
+                        <input type="email" id="emailAddressPublic" name="emailAddress" placeholder="e.g., john.doe@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="voicemailPinPublic" class="required">Voicemail PIN</label>
+                        <input type="password" id="voicemailPinPublic" name="voicemailPin" placeholder="Enter voicemail PIN" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="portalPasswordPublic" class="required">Portal Password</label>
+                        <input type="password" id="portalPasswordPublic" name="portalPassword" placeholder="Enter portal password" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="departmentPublic">Department</label>
+                        <input type="text" id="departmentPublic" name="department" placeholder="e.g., Sales, Support">
+                    </div>
+                    <div class="form-group">
+                        <label for="sitePublic">Site</label>
+                        <input type="text" id="sitePublic" name="site" placeholder="e.g., Main Office, Remote">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customerTimezonePublic" class="required">Timezone</label>
+                        <input type="text" id="customerTimezonePublic" name="customerTimezone" placeholder="e.g., EST, PST" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="areaCodePublic" class="required">Area Code</label>
+                        <input type="text" id="areaCodePublic" name="areaCode" placeholder="e.g., 555" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-secondary" onclick="clearCustomerFormPublic()">Clear</button>
+                    <button type="submit" class="btn-primary">Export to CSV</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -466,9 +532,7 @@
         function checkAdminSession() {
             const adminSession = sessionStorage.getItem('adminLoggedIn');
             if (adminSession === 'true') {
-                showMainContent();
-            } else {
-                showLoginScreen();
+                showAdminPanel();
             }
         }
 
@@ -480,7 +544,7 @@
             if (password === ADMIN_PASSWORD) {
                 sessionStorage.setItem('adminLoggedIn', 'true');
                 isAdminLoggedIn = true;
-                showMainContent();
+                showAdminPanel();
             } else {
                 const errorDiv = document.getElementById('loginError');
                 errorDiv.textContent = 'Incorrect password. Please try again.';
@@ -497,20 +561,15 @@
             sessionStorage.removeItem('adminLoggedIn');
             isAdminLoggedIn = false;
             document.getElementById('loginForm').reset();
-            showLoginScreen();
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('publicCustomerForm').style.display = 'block';
         }
 
-        // Show main content after login
-        function showMainContent() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
+        // Show admin panel
+        function showAdminPanel() {
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('publicCustomerForm').style.display = 'none';
             loadAdminSettings();
-        }
-
-        // Show login screen
-        function showLoginScreen() {
-            document.getElementById('loginScreen').style.display = 'block';
-            document.getElementById('mainContent').style.display = 'none';
         }
 
         // Tab switching
@@ -522,7 +581,11 @@
                 btn.classList.remove('active');
             });
 
-            document.getElementById(tabName).classList.add('active');
+            if (tabName === 'customer') {
+                document.getElementById('customerTab').classList.add('active');
+            } else {
+                document.getElementById(tabName).classList.add('active');
+            }
             event.target.classList.add('active');
 
             if (tabName === 'preview') {
@@ -592,7 +655,77 @@
             document.getElementById('customerForm').reset();
         }
 
-        // Handle customer form submission
+        // Clear public customer form
+        function clearCustomerFormPublic() {
+            document.getElementById('customerFormPublic').reset();
+        }
+
+        // Handle public customer form submission
+        document.getElementById('customerFormPublic').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (Object.keys(adminSettings).length === 0) {
+                alert('Admin settings have not been configured yet. Please ask the administrator to set them up.');
+                return;
+            }
+
+            const extension = document.getElementById('extensionPublic').value.trim();
+            const firstName = document.getElementById('firstNamePublic').value.trim();
+            const lastName = document.getElementById('lastNamePublic').value.trim();
+            const emailAddress = document.getElementById('emailAddressPublic').value.trim();
+            const voicemailPin = document.getElementById('voicemailPinPublic').value.trim();
+            const portalPassword = document.getElementById('portalPasswordPublic').value.trim();
+            const department = document.getElementById('departmentPublic').value.trim();
+            const site = document.getElementById('sitePublic').value.trim();
+            const customerTimezone = document.getElementById('customerTimezonePublic').value.trim();
+            const areaCode = document.getElementById('areaCodePublic').value.trim();
+
+            if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !customerTimezone || !areaCode) {
+                alert('Please fill in all required fields (marked with *)');
+                return;
+            }
+
+            const login = `${extension}@${adminSettings.domain}`;
+
+            const csvData = [
+                extension,
+                adminSettings.domain,
+                firstName,
+                lastName,
+                login,
+                portalPassword,
+                emailAddress,
+                voicemailPin,
+                department,
+                site,
+                DEFAULT_VALUES.vmailEnabled,
+                DEFAULT_VALUES.answerTimeout,
+                customerTimezone,
+                areaCode,
+                adminSettings.callerIdNumber,
+                adminSettings.callerIdName,
+                adminSettings.nineOneOneCallerid,
+                adminSettings.dialPlan,
+                DEFAULT_VALUES.dialPermission,
+                DEFAULT_VALUES.audioDirectory,
+                DEFAULT_VALUES.visualDirectory,
+                DEFAULT_VALUES.vmailTranscribe,
+                DEFAULT_VALUES.emailVmail,
+                DEFAULT_VALUES.addPhoneExtension,
+                DEFAULT_VALUES.scope
+            ];
+
+            exportToCSV(csvData, firstName, lastName);
+
+            document.getElementById('successMessagePublic').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('successMessagePublic').style.display = 'none';
+            }, 5000);
+
+            this.reset();
+        });
+
+        // Handle customer form submission (from admin panel)
         document.getElementById('customerForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -655,7 +788,7 @@
             }, 5000);
 
             this.reset();
-        });
+        }
 
         // Export to CSV
         function exportToCSV(data, firstName, lastName) {
