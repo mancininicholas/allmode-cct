@@ -384,10 +384,6 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="customerTimezone" class="required">Timezone</label>
-                            <input type="text" id="customerTimezone" name="customerTimezone" placeholder="e.g., EST, PST" required>
-                        </div>
-                        <div class="form-group">
                             <label for="areaCode" class="required">Area Code</label>
                             <input type="text" id="areaCode" name="areaCode" placeholder="e.g., 555" required>
                         </div>
@@ -484,10 +480,6 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label for="customerTimezonePublic" class="required">Timezone</label>
-                        <input type="text" id="customerTimezonePublic" name="customerTimezone" placeholder="e.g., EST, PST" required>
-                    </div>
                     <div class="form-group">
                         <label for="areaCodePublic" class="required">Area Code</label>
                         <input type="text" id="areaCodePublic" name="areaCode" placeholder="e.g., 555" required>
@@ -698,10 +690,9 @@
                     const portalPassword = document.getElementById('portalPasswordPublic').value.trim();
             const department = document.getElementById('departmentPublic').value.trim();
             const site = document.getElementById('sitePublic').value.trim();
-            const customerTimezone = document.getElementById('customerTimezonePublic').value.trim();
             const areaCode = document.getElementById('areaCodePublic').value.trim();
 
-            if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !customerTimezone || !areaCode) {
+            if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
                 alert('Please fill in all required fields (marked with *)');
                 return;
             }
@@ -721,7 +712,7 @@
                 site,
                 DEFAULT_VALUES.vmailEnabled,
                 DEFAULT_VALUES.answerTimeout,
-                customerTimezone,
+                adminSettings.timezone,
                 areaCode,
                 adminSettings.callerIdNumber,
                 adminSettings.callerIdName,
@@ -769,10 +760,9 @@
             const portalPassword = document.getElementById('portalPassword').value.trim();
             const department = document.getElementById('department').value.trim();
             const site = document.getElementById('site').value.trim();
-            const customerTimezone = document.getElementById('customerTimezone').value.trim();
             const areaCode = document.getElementById('areaCode').value.trim();
 
-            if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !customerTimezone || !areaCode) {
+            if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
                 alert('Please fill in all required fields (marked with *)');
                 return;
             }
@@ -792,7 +782,7 @@
                 site,
                 DEFAULT_VALUES.vmailEnabled,
                 DEFAULT_VALUES.answerTimeout,
-                customerTimezone,
+                adminSettings.timezone,
                 areaCode,
                 adminSettings.callerIdNumber,
                 adminSettings.callerIdName,
