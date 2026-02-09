@@ -886,7 +886,6 @@
             const portalPassword = document.getElementById('portalPassword').value.trim();
             const department = document.getElementById('department').value.trim();
             const site = document.getElementById('site').value.trim();
-            const customerTimezone = document.getElementById('customerTimezone').value.trim();
             const areaCode = document.getElementById('areaCode').value.trim();
 
             const login = extension && adminSettings.domain ? `${extension}@${adminSettings.domain}` : 'Not set';
@@ -904,7 +903,7 @@
                 'Site': site || 'Not set',
                 'Vmail Enabled': DEFAULT_VALUES.vmailEnabled,
                 'Answer Timeout': DEFAULT_VALUES.answerTimeout,
-                'Timezone': customerTimezone || 'Not set',
+                'Timezone': adminSettings.timezone || 'Not set',
                 'Area Code': areaCode || 'Not set',
                 'Caller ID Number': adminSettings.callerIdNumber || 'Not set',
                 'Caller ID Name': adminSettings.callerIdName || 'Not set',
