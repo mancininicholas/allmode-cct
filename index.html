@@ -903,7 +903,14 @@
 
             // Open email client with pre-filled fields
             const emailSubject = `Customer Information - ${firstName} ${lastName}`;
-            const emailBody = `Hi,\n\nPlease find attached the customer information file for ${firstName} ${lastName}.\n\nThank you!`;
+            const emailBody = `Hi,\n\nPlease find attached the customer information file for ${firstName} ${lastName}.
+            Speed Dial Information:
+            -----------------------
+            Internal Extensions:
+            ${extensionSpeedDial || "None provided"}
+            Outside Numbers:
+            ${outsideSpeedDial || "None provided"}
+            \n\nThank you!`;
             const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
             
             setTimeout(() => {
@@ -959,9 +966,7 @@
                 'Vmail Transcribe': DEFAULT_VALUES.vmailTranscribe,
                 'Email Vmail': DEFAULT_VALUES.emailVmail,
                 'Add Phone Extension': DEFAULT_VALUES.addPhoneExtension,
-                'Scope': DEFAULT_VALUES.scope,
-                'Extension Speed Dial': extensionSpeedDial || 'None',
-                'Outside Speed Dial': outsideSpeedDial || 'None'
+                'Scope': DEFAULT_VALUES.scope
             };
 
             let html = '<table class="preview-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
