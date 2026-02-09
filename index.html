@@ -679,20 +679,23 @@
         }
 
         // Handle public customer form submission
-        document.getElementById('customerFormPublic').addEventListener('submit', function(e) {
-            e.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            const publicForm = document.getElementById('customerFormPublic');
+            if (publicForm) {
+                publicForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
 
-            if (Object.keys(adminSettings).length === 0) {
-                alert('Admin settings have not been configured yet. Please ask the administrator to set them up.');
-                return;
-            }
+                    if (Object.keys(adminSettings).length === 0) {
+                        alert('Admin settings have not been configured yet. Please ask the administrator to set them up.');
+                        return;
+                    }
 
-            const extension = document.getElementById('extensionPublic').value.trim();
-            const firstName = document.getElementById('firstNamePublic').value.trim();
-            const lastName = document.getElementById('lastNamePublic').value.trim();
-            const emailAddress = document.getElementById('emailAddressPublic').value.trim();
-            const voicemailPin = document.getElementById('voicemailPinPublic').value.trim();
-            const portalPassword = document.getElementById('portalPasswordPublic').value.trim();
+                    const extension = document.getElementById('extensionPublic').value.trim();
+                    const firstName = document.getElementById('firstNamePublic').value.trim();
+                    const lastName = document.getElementById('lastNamePublic').value.trim();
+                    const emailAddress = document.getElementById('emailAddressPublic').value.trim();
+                    const voicemailPin = document.getElementById('voicemailPinPublic').value.trim();
+                    const portalPassword = document.getElementById('portalPasswordPublic').value.trim();
             const department = document.getElementById('departmentPublic').value.trim();
             const site = document.getElementById('sitePublic').value.trim();
             const customerTimezone = document.getElementById('customerTimezonePublic').value.trim();
@@ -741,11 +744,16 @@
             }, 5000);
 
             this.reset();
+                });
+            }
         });
 
         // Handle customer form submission (from admin panel)
-        document.getElementById('customerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('customerForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
 
             if (Object.keys(adminSettings).length === 0) {
                 alert('Admin settings have not been configured yet. Please ask the administrator to set them up.');
@@ -806,7 +814,9 @@
             }, 5000);
 
             this.reset();
-        }
+                });
+            }
+        });
 
         // Export to CSV
         function exportToCSV(data, firstName, lastName) {
