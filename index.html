@@ -389,6 +389,20 @@
                         </div>
                     </div>
 
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="extensionSpeedDial">Extensions for Speed Dial</label>
+                            <textarea id="extensionSpeedDial" name="extensionSpeedDial" placeholder="Example: 6130 - Nick" style="font-family: monospace; height: 80px; resize: vertical;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="outsideSpeedDial">Outside Numbers for Speed Dial</label>
+                            <textarea id="outsideSpeedDial" name="outsideSpeedDial" placeholder="Example: 607-422-5587 - Nick" style="font-family: monospace; height: 80px; resize: vertical;"></textarea>
+                        </div>
+                    </div>
+
                     <div class="button-group">
                         <button type="button" class="btn-secondary" onclick="clearCustomerForm()">Clear</button>
                         <button type="submit" class="btn-primary">Export to CSV</button>
@@ -483,6 +497,20 @@
                     <div class="form-group">
                         <label for="areaCodePublic" class="required">Area Code</label>
                         <input type="text" id="areaCodePublic" name="areaCode" placeholder="e.g., 555" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="extensionSpeedDialPublic">Extensions for Speed Dial</label>
+                        <textarea id="extensionSpeedDialPublic" name="extensionSpeedDial" placeholder="Example: 6130 - Nick" style="font-family: monospace; height: 80px; resize: vertical;"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="outsideSpeedDialPublic">Outside Numbers for Speed Dial</label>
+                        <textarea id="outsideSpeedDialPublic" name="outsideSpeedDial" placeholder="Example: 607-422-5587 - Nick" style="font-family: monospace; height: 80px; resize: vertical;"></textarea>
                     </div>
                 </div>
 
@@ -691,9 +719,8 @@
             const department = document.getElementById('departmentPublic').value.trim();
             const site = document.getElementById('sitePublic').value.trim();
             const areaCode = document.getElementById('areaCodePublic').value.trim();
-
-            if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
-                alert('Please fill in all required fields (marked with *)');
+            const extensionSpeedDial = document.getElementById('extensionSpeedDialPublic').value.trim();
+            const outsideSpeedDial = document.getElementById('outsideSpeedDialPublic').value.trim();
                 return;
             }
 
@@ -724,7 +751,9 @@
                 DEFAULT_VALUES.vmailTranscribe,
                 DEFAULT_VALUES.emailVmail,
                 DEFAULT_VALUES.addPhoneExtension,
-                DEFAULT_VALUES.scope
+                DEFAULT_VALUES.scope,
+                extensionSpeedDial,
+                outsideSpeedDial
             ];
 
             exportToCSV(csvData, firstName, lastName);
@@ -761,6 +790,8 @@
             const department = document.getElementById('department').value.trim();
             const site = document.getElementById('site').value.trim();
             const areaCode = document.getElementById('areaCode').value.trim();
+            const extensionSpeedDial = document.getElementById('extensionSpeedDial').value.trim();
+            const outsideSpeedDial = document.getElementById('outsideSpeedDial').value.trim();
 
             if (!extension || !firstName || !lastName || !emailAddress || !voicemailPin || !portalPassword || !areaCode) {
                 alert('Please fill in all required fields (marked with *)');
@@ -887,6 +918,8 @@
             const department = document.getElementById('department').value.trim();
             const site = document.getElementById('site').value.trim();
             const areaCode = document.getElementById('areaCode').value.trim();
+            const extensionSpeedDial = document.getElementById('extensionSpeedDial').value.trim();
+            const outsideSpeedDial = document.getElementById('outsideSpeedDial').value.trim();
 
             const login = extension && adminSettings.domain ? `${extension}@${adminSettings.domain}` : 'Not set';
 
@@ -915,7 +948,9 @@
                 'Vmail Transcribe': DEFAULT_VALUES.vmailTranscribe,
                 'Email Vmail': DEFAULT_VALUES.emailVmail,
                 'Add Phone Extension': DEFAULT_VALUES.addPhoneExtension,
-                'Scope': DEFAULT_VALUES.scope
+                'Scope': DEFAULT_VALUES.scope,
+                'Extension Speed Dial': extensionSpeedDial || 'None',
+                'Outside Speed Dial': outsideSpeedDial || 'None'
             };
 
             let html = '<table class="preview-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
