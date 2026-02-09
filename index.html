@@ -357,6 +357,17 @@
                         <button type="button" class="btn-secondary" onclick="clearAdminForm()">Clear</button>
                         <button type="button" class="btn-primary" onclick="saveAdminSettings()">Save Settings</button>
                     </div>
+
+                    <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+                    <h3 style="color: #333; margin-bottom: 15px;">Share Settings with Team</h3>
+                    <div class="info-box" style="background: #e3f2fd; border-left-color: #2196f3;">
+                        <p><strong>Instructions:</strong> After saving your settings, click "Generate Shareable Link" to create a link that customers can use. They won't need to enter these settings manually.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; margin-top: 15px;">
+                        <button type="button" class="btn-secondary" onclick="generateShareableLink()" style="margin: 0;">Generate Shareable Link</button>
+                        <input type="text" id="shareableLink" readonly style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; font-size: 12px;">
+                        <button type="button" class="btn-primary" style="margin: 0; padding: 10px 15px; font-size: 13px;" onclick="copyShareableLink()">Copy</button>
+                    </div>
                 </form>
             </div>
 
@@ -695,29 +706,92 @@
             }, 3000);
         }
 
-        // Load admin settings from localStorage
+        // Load admin settings from localStorage or URL parameters
         function loadAdminSettings() {
-            const savedSettings = localStorage.getItem('adminSettings');
-            if (savedSettings) {
-                try {
-                    adminSettings = JSON.parse(savedSettings);
-                    const domainElem = document.getElementById('domain');
-                    if (domainElem) domainElem.value = adminSettings.domain || '';
-                    const timezoneElem = document.getElementById('adminTimezone');
-                    if (timezoneElem) timezoneElem.value = adminSettings.timezone || '';
-                    const callerIdNumElem = document.getElementById('callerIdNumber');
-                    if (callerIdNumElem) callerIdNumElem.value = adminSettings.callerIdNumber || '';
-                    const callerIdNameElem = document.getElementById('callerIdName');
-                    if (callerIdNameElem) callerIdNameElem.value = adminSettings.callerIdName || '';
-                    const nineOneOneElem = document.getElementById('nineOneOneCallerid');
-                    if (nineOneOneElem) nineOneOneElem.value = adminSettings.nineOneOneCallerid || '';
-                    const dialPlanElem = document.getElementById('dialPlan');
-                    if (dialPlanElem) dialPlanElem.value = adminSettings.dialPlan || '';
-                    console.log('Admin settings loaded successfully');
-                } catch (e) {
-                    console.error('Error loading admin settings:', e);
+            // First, check if settings are in URL parameters (shareable link)
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlSettings = extractSettingsFromURL(urlParams);
+            
+            if (Object.keys(urlSettings).length > 0) {
+                // Use URL settings if they exist
+                adminSettings = urlSettings;
+                localStorage.setItem('adminSettings', JSON.stringify(adminSettings));
+            } else {
+                // Otherwise, load from localStorage
+                const savedSettings = localStorage.getItem('adminSettings');
+                if (savedSettings) {
+                    try {
+                        adminSettings = JSON.parse(savedSettings);
+                    } catch (e) {
+                        console.error('Error loading admin settings:', e);
+                    }
                 }
             }
+
+            // Populate form fields with loaded settings
+            const domainElem = document.getElementById('domain');
+            if (domainElem) domainElem.value = adminSettings.domain || '';
+            const timezoneElem = document.getElementById('adminTimezone');
+            if (timezoneElem) timezoneElem.value = adminSettings.timezone || '';
+            const callerIdNumElem = document.getElementById('callerIdNumber');
+            if (callerIdNumElem) callerIdNumElem.value = adminSettings.callerIdNumber || '';
+            const callerIdNameElem = document.getElementById('callerIdName');
+            if (callerIdNameElem) callerIdNameElem.value = adminSettings.callerIdName || '';
+            const nineOneOneElem = document.getElementById('nineOneOneCallerid');
+            if (nineOneOneElem) nineOneOneElem.value = adminSettings.nineOneOneCallerid || '';
+            const dialPlanElem = document.getElementById('dialPlan');
+            if (dialPlanElem) dialPlanElem.value = adminSettings.dialPlan || '';
+            
+            console.log('Admin settings loaded successfully');
+        }
+
+        // Extract settings from URL parameters
+        function extractSettingsFromURL(urlParams) {
+            const settings = {};
+            const keys = ['domain', 'timezone', 'callerIdNumber', 'callerIdName', 'nineOneOneCallerid', 'dialPlan'];
+            
+            for (const key of keys) {
+                const value = urlParams.get(key);
+                if (value) {
+                    settings[key] = decodeURIComponent(value);
+                }
+            }
+            
+            return settings;
+        }
+
+        // Generate shareable link with settings
+        function generateShareableLink() {
+            if (Object.keys(adminSettings).length === 0) {
+                alert('Please save your settings first before generating a shareable link');
+                return;
+            }
+
+            const baseUrl = window.location.origin + window.location.pathname;
+            const params = new URLSearchParams();
+            
+            params.append('domain', adminSettings.domain);
+            params.append('timezone', adminSettings.timezone);
+            params.append('callerIdNumber', adminSettings.callerIdNumber);
+            params.append('callerIdName', adminSettings.callerIdName);
+            params.append('nineOneOneCallerid', adminSettings.nineOneOneCallerid);
+            params.append('dialPlan', adminSettings.dialPlan);
+            
+            const shareableLink = `${baseUrl}?${params.toString()}`;
+            document.getElementById('shareableLink').value = shareableLink;
+        }
+
+        // Copy shareable link to clipboard
+        function copyShareableLink() {
+            const linkField = document.getElementById('shareableLink');
+            if (!linkField.value) {
+                alert('Generate a shareable link first');
+                return;
+            }
+            
+            linkField.select();
+            document.execCommand('copy');
+            alert('Shareable link copied to clipboard!');
         }
 
         // Clear admin form
