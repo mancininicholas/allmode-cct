@@ -613,7 +613,15 @@
             } else {
                 document.getElementById(tabName).classList.add('active');
             }
-            event.target.classList.add('active');
+            
+            // Activate the corresponding button
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                if ((tabName === 'customer' && btn.textContent.includes('Customer')) ||
+                    (tabName === 'admin' && btn.textContent.includes('ADMIN')) ||
+                    (tabName === 'preview' && btn.textContent.includes('Preview'))) {
+                    btn.classList.add('active');
+                }
+            });
 
             if (tabName === 'preview') {
                 updatePreview();
