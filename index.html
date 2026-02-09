@@ -905,7 +905,7 @@
                 ? `\n\n--- SPEED DIAL INFORMATION ---\nInternal Extensions:\n${extensionSpeedDial || '(None provided)'}\n\nOutside Numbers:\n${outsideSpeedDial || '(None provided)'}` 
                 : '';
             const emailBody = `Hi,\n\nPlease find attached the customer information file for ${firstName} ${lastName}.${speedDialSection}\n\nThank you!`;
-            const mailtoLink = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            const mailtoLink = `mailto:nmancini@all-mode.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
             
             setTimeout(() => {
                 window.location.href = mailtoLink;
