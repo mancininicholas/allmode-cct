@@ -642,13 +642,24 @@
         function loadAdminSettings() {
             const savedSettings = localStorage.getItem('adminSettings');
             if (savedSettings) {
-                adminSettings = JSON.parse(savedSettings);
-                document.getElementById('domain').value = adminSettings.domain || '';
-                document.getElementById('adminTimezone').value = adminSettings.timezone || '';
-                document.getElementById('callerIdNumber').value = adminSettings.callerIdNumber || '';
-                document.getElementById('callerIdName').value = adminSettings.callerIdName || '';
-                document.getElementById('nineOneOneCallerid').value = adminSettings.nineOneOneCallerid || '';
-                document.getElementById('dialPlan').value = adminSettings.dialPlan || '';
+                try {
+                    adminSettings = JSON.parse(savedSettings);
+                    const domainElem = document.getElementById('domain');
+                    if (domainElem) domainElem.value = adminSettings.domain || '';
+                    const timezoneElem = document.getElementById('adminTimezone');
+                    if (timezoneElem) timezoneElem.value = adminSettings.timezone || '';
+                    const callerIdNumElem = document.getElementById('callerIdNumber');
+                    if (callerIdNumElem) callerIdNumElem.value = adminSettings.callerIdNumber || '';
+                    const callerIdNameElem = document.getElementById('callerIdName');
+                    if (callerIdNameElem) callerIdNameElem.value = adminSettings.callerIdName || '';
+                    const nineOneOneElem = document.getElementById('nineOneOneCallerid');
+                    if (nineOneOneElem) nineOneOneElem.value = adminSettings.nineOneOneCallerid || '';
+                    const dialPlanElem = document.getElementById('dialPlan');
+                    if (dialPlanElem) dialPlanElem.value = adminSettings.dialPlan || '';
+                    console.log('Admin settings loaded successfully');
+                } catch (e) {
+                    console.error('Error loading admin settings:', e);
+                }
             }
         }
 
