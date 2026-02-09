@@ -420,13 +420,13 @@
                     <p><strong>Admin Access:</strong> Enter password to configure customer settings.</p>
                 </div>
                 <div id="loginError" class="error-message"></div>
-                <form id="loginForm" onsubmit="handleAdminLogin(event)" style="display: flex; gap: 10px; align-items: flex-end;">
+                <div style="display: flex; gap: 10px; align-items: flex-end;">
                     <div style="flex: 1;">
                         <label for="adminPassword">Admin Password</label>
                         <input type="password" id="adminPassword" name="adminPassword" placeholder="Enter admin password" style="margin: 0;">
                     </div>
-                    <button type="submit" class="btn-primary" style="margin: 0; padding: 10px 20px;">Login</button>
-                </form>
+                    <button type="button" class="btn-primary" style="margin: 0; padding: 10px 20px;" onclick="handleAdminLogin(event)">Login</button>
+                </div>
             </div>
 
             <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
@@ -538,7 +538,7 @@
 
         // Handle admin login
         function handleAdminLogin(event) {
-            event.preventDefault();
+            if (event) event.preventDefault();
             const password = document.getElementById('adminPassword').value;
             console.log('Admin login attempt, password entered:', password === ADMIN_PASSWORD ? 'correct' : 'incorrect');
             
@@ -563,7 +563,7 @@
         function handleLogout() {
             sessionStorage.removeItem('adminLoggedIn');
             isAdminLoggedIn = false;
-            document.getElementById('loginForm').reset();
+            document.getElementById('adminPassword').value = '';
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('publicCustomerForm').style.display = 'block';
         }
