@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120">
+  <rect width="100%" height="100%" fill="none"/>
+  <!-- stylized 'A' and 'M' shapes -->
+  <g transform="translate(12,12)">
+    <polygon points="10,88 40,8 70,88" fill="#111"/>
+    <polygon points="84,88 114,8 144,88" fill="#111"/>
+    <rect x="68" y="56" width="36" height="12" fill="#1565c0" rx="3"/>
+    <!-- small connecting shapes to mimic the original style -->
+    <polygon points="70,88 84,88 84,72 70,72" fill="#111"/>
+    <polygon points="46,88 60,88 60,72 46,72" fill="#111"/>
+  </g>
+</svg>
