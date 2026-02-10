@@ -13,20 +13,38 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ffffff; /* full-page white background */
             min-height: 100vh;
             padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
         }
 
         .container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            background: transparent; /* let the whole page be white */
+            border-radius: 0;
+            box-shadow: none;
             max-width: 900px;
             width: 100%;
+        }
+
+        /* Header area for logo and brand image */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 10px 0 20px 0;
+            width: 100%;
+        }
+
+        .header .logo img { height: 56px; width: auto; display: block; }
+        .header .brand img { height: 36px; width: auto; display: block; }
+
+        @media (max-width: 600px) {
+            .header { gap: 10px; }
+            .header .logo img { height: 44px; }
+            .header .brand img { height: 28px; }
         }
 
         .login-container {
@@ -297,6 +315,10 @@
 </head>
 <body>
     <div class="container">
+        <div class="header">
+            <div class="logo"><img src="assets/logo.png" alt="Logo"></div>
+            <div class="brand"><img src="assets/header.png" alt="All-Mode Communications"></div>
+        </div>
         <!-- Admin Panel (Hidden until logged in) -->
         <div id="adminPanel" style="display: none;">
             <div class="logout-btn">
