@@ -215,6 +215,17 @@
             animation: slideDown 0.3s ease;
         }
 
+        .pin-helper {
+            display: none;
+            margin-top: 6px;
+            color: #d32f2f;
+            font-size: 12px;
+        }
+
+        .pin-helper.is-visible {
+            display: block;
+        }
+
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -983,15 +994,37 @@
             return BLOCKED_VOICEMAIL_PINS.has(pin);
         }
 
+        function ensurePinHelper(input) {
+            const parent = input.parentElement;
+            if (!parent) {
+                return null;
+            }
+            let helper = parent.querySelector('.pin-helper');
+            if (!helper) {
+                helper = document.createElement('div');
+                helper.className = 'pin-helper';
+                helper.setAttribute('aria-live', 'polite');
+                parent.appendChild(helper);
+            }
+            return helper;
+        }
+
         function validateVoicemailPinInput(input) {
             const pin = input.value.trim();
+            const helper = ensurePinHelper(input);
             if (pin && isBlockedVoicemailPin(pin)) {
                 input.setCustomValidity('This voicemail PIN is not allowed. Please choose a different PIN.');
-                input.reportValidity();
-                input.focus();
+                if (helper) {
+                    helper.textContent = 'This voicemail PIN is not allowed. Please choose a different PIN.';
+                    helper.classList.add('is-visible');
+                }
                 return false;
             }
             input.setCustomValidity('');
+            if (helper) {
+                helper.textContent = '';
+                helper.classList.remove('is-visible');
+            }
             return true;
         }
 
@@ -999,7 +1032,11 @@
             if (!input) {
                 return;
             }
+            ensurePinHelper(input);
             input.addEventListener('blur', () => {
+                validateVoicemailPinInput(input);
+            });
+            input.addEventListener('input', () => {
                 validateVoicemailPinInput(input);
             });
         }
