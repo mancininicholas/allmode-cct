@@ -361,7 +361,12 @@
                         </div>
                         <div class="form-group">
                             <label for="adminTimezone" class="required">Timezone</label>
-                            <input type="text" id="adminTimezone" name="adminTimezone" placeholder="e.g., EST, PST" required>
+                            <select id="adminTimezone" name="adminTimezone" required>
+                                <option value="">Select a timezone</option>
+                                <option value="US/Eastern" selected>US/Eastern</option>
+                                <option value="US/Pacific">US/Pacific</option>
+                                <option value="US/Central">US/Central</option>
+                            </select>
                         </div>
                     </div>
 
@@ -937,6 +942,33 @@
             };
         }
 
+        const BLOCKED_VOICEMAIL_PINS = new Set([
+            '0000',
+            '1111',
+            '1234',
+            '12345',
+            '123456',
+            '2222',
+            '2580',
+            '3333',
+            '4321',
+            '4444',
+            '54321',
+            '5555',
+            '654321',
+            '6666',
+            '6789',
+            '7777',
+            '8888',
+            '9876',
+            '9999',
+            '98765'
+        ]);
+
+        function isBlockedVoicemailPin(pin) {
+            return BLOCKED_VOICEMAIL_PINS.has(pin);
+        }
+
         // Handle public customer form submission
         document.addEventListener('DOMContentLoaded', function() {
             const publicForm = document.getElementById('customerFormPublic');
@@ -964,6 +996,11 @@
                         return;
                     }
 
+                    if (isBlockedVoicemailPin(voicemailPin)) {
+                        alert('This voicemail PIN is not allowed. Please choose a different PIN.');
+                        return;
+                    }
+
                     // Collect main person's data
                     const allPeople = [{
                         extension,
@@ -980,6 +1017,10 @@
                     // Collect team member data
                     for (const memberId of teamMembersPublic) {
                         const member = getTeamMemberData(memberId, true);
+                        if (member.voicemailPin && isBlockedVoicemailPin(member.voicemailPin)) {
+                            alert(`Please choose a different voicemail PIN for team member #${memberId + 1}.`);
+                            return;
+                        }
                         if (member.extension && member.firstName && member.lastName && member.emailAddress && member.voicemailPin && member.portalPassword) {
                             allPeople.push({
                                 extension: member.extension,
@@ -1042,6 +1083,11 @@
                         return;
                     }
 
+                    if (isBlockedVoicemailPin(voicemailPin)) {
+                        alert('This voicemail PIN is not allowed. Please choose a different PIN.');
+                        return;
+                    }
+
                     // Collect main person's data
                     const allPeople = [{
                         extension,
@@ -1058,6 +1104,10 @@
                     // Collect team member data
                     for (const memberId of teamMembers) {
                         const member = getTeamMemberData(memberId, false);
+                        if (member.voicemailPin && isBlockedVoicemailPin(member.voicemailPin)) {
+                            alert(`Please choose a different voicemail PIN for team member #${memberId + 1}.`);
+                            return;
+                        }
                         if (member.extension && member.firstName && member.lastName && member.emailAddress && member.voicemailPin && member.portalPassword) {
                             allPeople.push({
                                 extension: member.extension,
