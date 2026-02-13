@@ -917,6 +917,7 @@
             const formHTML = createTeamMemberFormHTML(index, false);
             container.insertAdjacentHTML('beforeend', formHTML);
             teamMembers.push(index);
+            attachVoicemailPinValidation(document.getElementById(`tmVoicemailPin${index}`));
         }
 
         // Add team member to public form
@@ -926,6 +927,7 @@
             const formHTML = createTeamMemberFormHTML(index, true);
             container.insertAdjacentHTML('beforeend', formHTML);
             teamMembersPublic.push(index);
+            attachVoicemailPinValidation(document.getElementById(`tmVoicemailPinPublic${index}`));
         }
 
         // Remove team member from form
@@ -981,10 +983,32 @@
             return BLOCKED_VOICEMAIL_PINS.has(pin);
         }
 
+        function validateVoicemailPinInput(input) {
+            const pin = input.value.trim();
+            if (pin && isBlockedVoicemailPin(pin)) {
+                input.setCustomValidity('This voicemail PIN is not allowed. Please choose a different PIN.');
+                input.reportValidity();
+                input.focus();
+                return false;
+            }
+            input.setCustomValidity('');
+            return true;
+        }
+
+        function attachVoicemailPinValidation(input) {
+            if (!input) {
+                return;
+            }
+            input.addEventListener('blur', () => {
+                validateVoicemailPinInput(input);
+            });
+        }
+
         // Handle public customer form submission
         document.addEventListener('DOMContentLoaded', function() {
             const publicForm = document.getElementById('customerFormPublic');
             if (publicForm) {
+                attachVoicemailPinValidation(document.getElementById('voicemailPinPublic'));
                 publicForm.addEventListener('submit', function(e) {
                     e.preventDefault();
 
@@ -1008,8 +1032,7 @@
                         return;
                     }
 
-                    if (isBlockedVoicemailPin(voicemailPin)) {
-                        alert('This voicemail PIN is not allowed. Please choose a different PIN.');
+                    if (!validateVoicemailPinInput(document.getElementById('voicemailPinPublic'))) {
                         return;
                     }
 
@@ -1028,11 +1051,11 @@
 
                     // Collect team member data
                     for (const memberId of teamMembersPublic) {
-                        const member = getTeamMemberData(memberId, true);
-                        if (member.voicemailPin && isBlockedVoicemailPin(member.voicemailPin)) {
-                            alert(`Please choose a different voicemail PIN for team member #${memberId + 1}.`);
+                        const memberPinInput = document.getElementById(`tmVoicemailPinPublic${memberId}`);
+                        if (memberPinInput && !validateVoicemailPinInput(memberPinInput)) {
                             return;
                         }
+                        const member = getTeamMemberData(memberId, true);
                         if (member.extension && member.firstName && member.lastName && member.emailAddress && member.voicemailPin && member.portalPassword) {
                             allPeople.push({
                                 extension: member.extension,
@@ -1072,6 +1095,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('customerForm');
             if (form) {
+                attachVoicemailPinValidation(document.getElementById('voicemailPin'));
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
 
@@ -1095,8 +1119,7 @@
                         return;
                     }
 
-                    if (isBlockedVoicemailPin(voicemailPin)) {
-                        alert('This voicemail PIN is not allowed. Please choose a different PIN.');
+                    if (!validateVoicemailPinInput(document.getElementById('voicemailPin'))) {
                         return;
                     }
 
@@ -1115,11 +1138,11 @@
 
                     // Collect team member data
                     for (const memberId of teamMembers) {
-                        const member = getTeamMemberData(memberId, false);
-                        if (member.voicemailPin && isBlockedVoicemailPin(member.voicemailPin)) {
-                            alert(`Please choose a different voicemail PIN for team member #${memberId + 1}.`);
+                        const memberPinInput = document.getElementById(`tmVoicemailPin${memberId}`);
+                        if (memberPinInput && !validateVoicemailPinInput(memberPinInput)) {
                             return;
                         }
+                        const member = getTeamMemberData(memberId, false);
                         if (member.extension && member.firstName && member.lastName && member.emailAddress && member.voicemailPin && member.portalPassword) {
                             allPeople.push({
                                 extension: member.extension,
