@@ -896,6 +896,16 @@
                             <input type="password" id="tmPortalPassword${prefix}${index}" placeholder="Enter portal password" required>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tmDepartment${prefix}${index}">Department</label>
+                            <input type="text" id="tmDepartment${prefix}${index}" placeholder="e.g., Sales, Support">
+                        </div>
+                        <div class="form-group">
+                            <label for="tmSite${prefix}${index}">Site</label>
+                            <input type="text" id="tmSite${prefix}${index}" placeholder="e.g., Main Office, Remote">
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -938,7 +948,9 @@
                 lastName: document.getElementById(`tmLastName${prefix}${index}`).value.trim(),
                 emailAddress: document.getElementById(`tmEmail${prefix}${index}`).value.trim(),
                 voicemailPin: document.getElementById(`tmVoicemailPin${prefix}${index}`).value.trim(),
-                portalPassword: document.getElementById(`tmPortalPassword${prefix}${index}`).value.trim()
+                portalPassword: document.getElementById(`tmPortalPassword${prefix}${index}`).value.trim(),
+                department: document.getElementById(`tmDepartment${prefix}${index}`).value.trim(),
+                site: document.getElementById(`tmSite${prefix}${index}`).value.trim()
             };
         }
 
@@ -1029,8 +1041,8 @@
                                 emailAddress: member.emailAddress,
                                 voicemailPin: member.voicemailPin,
                                 portalPassword: member.portalPassword,
-                                department: department, // same department as main person
-                                site: site,
+                                department: member.department || department,
+                                site: member.site || site,
                                 areaCode: areaCode
                             });
                         }
@@ -1116,8 +1128,8 @@
                                 emailAddress: member.emailAddress,
                                 voicemailPin: member.voicemailPin,
                                 portalPassword: member.portalPassword,
-                                department: department, // same department as main person
-                                site: site,
+                                department: member.department || department,
+                                site: member.site || site,
                                 areaCode: areaCode
                             });
                         }
